@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace Mitsuba {
     class MitsubaExporter {
-		private const string MTS_VERSION = "0.4.0";
+		private const string MTS_VERSION = "0.6.0";
 		private string m_basePath, m_filename;
 		private XmlDocument m_xmlDocument;
 		private MitsubaSettings m_settings;
@@ -35,7 +35,7 @@ namespace Mitsuba {
 
 			/* Create an empty scene DOM representation */
 			m_xmlDocument = new XmlDocument();
-			m_xmlDocument.LoadXml("<?xml version=\"1.0\"?> <scene version=\"" + MTS_VERSION + "\"/>");
+			m_xmlDocument.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?> <scene version=\"" + MTS_VERSION + "\" />");
 			XmlElement docRoot = m_xmlDocument.DocumentElement;
 
 			m_meshStore.Create(Path.GetFileNameWithoutExtension(m_filename) + ".serialized");
@@ -358,10 +358,16 @@ namespace Mitsuba {
 
                 
                 RhinoApp.WriteLine("Exporting Mesh:" + obj.Name);
-                int index = m_meshStore.Store(mesh, obj.Name);
-                shapeElement.AppendChild(MakeProperty("filename", m_meshStore.Filename));
-                shapeElement.AppendChild(MakeProperty("shapeIndex", index));
-                shapeElement.SetAttribute("type", "serialized");
+                if (m_meshStore.WriteSerialized) {
+                    int index = m_meshStore.StoreSerialized(mesh, obj.Name);
+                    shapeElement.AppendChild(MakeProperty("filename", m_meshStore.Filename));
+                    shapeElement.AppendChild(MakeProperty("shapeIndex", index));
+                    shapeElement.SetAttribute("type", "serialized");
+                } else {
+                    String filename = m_meshStore.StoreOBJ(mesh, obj.Name);
+                    shapeElement.AppendChild(MakeProperty("filename", filename));
+                    shapeElement.SetAttribute("type", "obj");
+                }
                 parent.AppendChild(shapeElement);
 
 				if (matIdx >= 0 && m_xmlIdMap.ContainsKey(matIdx)) {
