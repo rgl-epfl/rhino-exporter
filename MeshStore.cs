@@ -169,9 +169,15 @@ namespace Mitsuba {
                 String a = (face.A + 1).ToString();
                 String b = (face.B + 1).ToString();
                 String c = (face.C + 1).ToString();
-                stream.WriteLine("f " + a + "/" + a + "/" + a + " "
-                                      + b + "/" + b + "/" + b + " "
-                                      + c + "/" + c + "/" + c);
+                if (texCoords.Count > 0) {
+                    stream.WriteLine("f " + a + "/" + a + "/" + a + " "
+                                          + b + "/" + b + "/" + b + " "
+                                          + c + "/" + c + "/" + c);
+                }  else {
+                    stream.WriteLine("f " + a + "//" + a + " "
+                                          + b + "//" + b + " "
+                                          + c + "//" + c);
+                }
             }
 
             stream.Close();
