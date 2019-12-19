@@ -149,7 +149,6 @@ namespace Mitsuba {
 			return true;
 		}
 
-
 		private bool ExportMaterial(XmlElement parent, RhinoDoc doc, int idx) {
 			Material mat = doc.Materials[idx];
 
@@ -165,7 +164,7 @@ namespace Mitsuba {
 			}
 			Log(" -> type = " + matType);
 
-			string materialName = mat.Name.Length > 0 ? 
+			string materialName = (mat.Name != null && mat.Name.Length > 0) ? 
 				mat.Name : "Unnamed material";
 
 			int counter = 1;
@@ -340,11 +339,14 @@ namespace Mitsuba {
 					continue;
 
 				XmlElement shapeElement = m_xmlDocument.CreateElement("shape");
-				if (obj.Name.Length > 0)
+				if (obj.Name != null && obj.Name.Length > 0)
 					shapeElement.AppendChild(m_xmlDocument.CreateComment(" Rhino object '" + obj.Name + "' "));
 
 				RhinoDoc doc = obj.Document;
 				Mesh mesh = meshRef.Mesh();
+
+				if (mesh.Faces == null)
+					continue;
 
 				int matIdx = -1;
 				switch (obj.Attributes.MaterialSource) {

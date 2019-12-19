@@ -26,7 +26,7 @@ namespace Mitsuba {
 		public int samplesPerPixel;
 
 		public void Load(PersistentSettings settings) {
-            writeSerialized = settings.GetBool("WriteSerialized", false);
+            writeSerialized = settings.GetBool("WriteSerialized", true);
             rendererDirectory = settings.GetString("RendererDirectory", "");
 			xres = settings.GetInteger("XResolution", 1024);
 			yres = settings.GetInteger("YResolution", 768);
@@ -356,7 +356,7 @@ namespace Mitsuba {
 			m_control = new MitsubaOptionsControl(ref m_mitsubaSettings);
 		}
 
-		public override Control PageControl {
+		public override Object PageControl {
 			get { return m_control; }
 		}
 

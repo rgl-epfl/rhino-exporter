@@ -56,7 +56,7 @@ namespace Mitsuba {
             int vertexCount = vertices.Count;
             int triangleCount = faces.TriangleCount;
             Log("MeshStore[" + meshCount + "]: adding mesh with " + vertexCount + " vertices, " + triangleCount + " triangles"
-                + (name.Length > 0 ? (" (\"" + name + "\")") : ""));
+                + (name != null && name.Length > 0 ? (" (\"" + name + "\")") : ""));
 
             meshDict.Add((ulong)output.Position);
             Serialize(output, MTS_FILEFORMAT_HEADER);
@@ -72,9 +72,9 @@ namespace Mitsuba {
                 flags |= MTS_HAS_NORMALS;
 
             Serialize(zStream, flags);
-            Serialize(zStream, name);
-            Serialize(zStream, (ulong)vertexCount);
-            Serialize(zStream, (ulong)triangleCount);
+            Serialize(zStream, (name == null) ? "" : name);
+            Serialize(zStream, (ulong) vertexCount);
+            Serialize(zStream, (ulong) triangleCount);
 
             for (int i = 0; i < vertexCount; ++i)
             {
@@ -120,7 +120,7 @@ namespace Mitsuba {
 
             faces.ConvertQuadsToTriangles();
 
-            if (name.Length <= 0) {
+            if (name == null || name.Length == 0) {
                 name = "mesh" + meshCount.ToString();
             }
 

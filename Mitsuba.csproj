@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mitsuba</RootNamespace>
     <AssemblyName>plugin-rhino5</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -52,12 +52,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zlib.CF">
-      <HintPath>.\Ionic.Zlib.CF.dll</HintPath>
+    <Reference Include="Ionic.Zlib">
+      <HintPath>.\Ionic.Zlib.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>C:\Program Files (x86)\Rhinoceros 5\System\RhinoCommon.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\..\Program Files\Rhino 6\System\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,7 +90,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Erase  "$(TargetDir)\..\$(ProjectName).rhp"
-"$(TargetDir)\..\..\ILMerge.exe" /t:library "$(TargetPath)" Ionic.Zlib.CF.dll /out:"$(TargetDir)\..\$(ProjectName).dll"
+"$(TargetDir)\..\..\ILMerge.exe" /t:library "$(TargetPath)" Ionic.Zlib.dll /out:"$(TargetDir)\..\$(ProjectName).dll"
 REN "$(TargetDir)\..\$(ProjectName).dll" $(ProjectName).rhp
 Erase "$(TargetDir)\RhinoCommon.dll"
 Erase "$(TargetDir)\RhinoCommon.xml"</PostBuildEvent>
