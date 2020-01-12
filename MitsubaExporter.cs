@@ -82,7 +82,7 @@ namespace Mitsuba {
 
 				RhinoObject[] instanceRefs = doc.Objects.FindByObjectType(ObjectType.InstanceReference);
 				foreach (RhinoObject o in instanceRefs) {
-					if (o.Name.Length > 0)
+					if (o.Name != null && o.Name.Length > 0)
 						Log("Exporting instance reference '" + o.Name + "'");
 					ExportInstanceRef(docRoot, (InstanceObject) o);
 				}
@@ -299,7 +299,7 @@ namespace Mitsuba {
 			}
 
 			XmlElement shapeElement = m_xmlDocument.CreateElement("shape");
-			if (inst.Name.Length > 0)
+			if (inst.Name != null && inst.Name.Length > 0)
 				shapeElement.AppendChild(m_xmlDocument.CreateComment(" Rhino object '" + inst.Name + "' "));
 			if (inst.InstanceDefinition.Name.Length > 0)
 				shapeElement.AppendChild(m_xmlDocument.CreateComment(" (references '" 
