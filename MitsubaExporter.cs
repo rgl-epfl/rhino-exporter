@@ -67,6 +67,8 @@ namespace Mitsuba {
 
 				/* Export the integrator */
 				ExportIntegrator(docRoot);
+				/* Create a sensor for the current view */
+				ExportSensor(docRoot, doc.Views.ActiveView.ActiveViewport);
 
 				/* Export materials */
 				for (int i = 0; i < doc.Materials.Count; ++i) {
@@ -97,8 +99,6 @@ namespace Mitsuba {
                     ExportRenderMesh(docRoot, o, false);  // false: not serialized representation
 				}
 
-				/* Create a sensor for the current view */
-				ExportSensor(docRoot, doc.Views.ActiveView.ActiveViewport);
 
 				/* Write the XML scene document */
 				FileStream output = new FileStream(sceneFile, FileMode.Create);
@@ -236,16 +236,8 @@ namespace Mitsuba {
 			filmElement.AppendChild(MakeProperty("height", m_settings.yres));
 			sensorElement.AppendChild(filmElement);
 
-			bool independentSampler = false;
-			if (m_settings.integrator == MitsubaSettings.Integrator.EAdjointParticleTracer ||
-				m_settings.integrator == MitsubaSettings.Integrator.EKelemenMLT ||
-				m_settings.integrator == MitsubaSettings.Integrator.EVeachMLT) {
-				/* These integrators require the independent sampler */
-				independentSampler = true;
-			}
-
 			XmlElement samplerElement = m_xmlDocument.CreateElement("sampler");
-			samplerElement.SetAttribute("type", independentSampler ? "independent" : "ldsampler");
+			samplerElement.SetAttribute("type", "independent");
 			samplerElement.AppendChild(MakeProperty("sampleCount", m_settings.samplesPerPixel));
 			sensorElement.AppendChild(samplerElement);
 
